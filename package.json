@@ -1,0 +1,8 @@
+{
+  "name": "webboard",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ]
+}
