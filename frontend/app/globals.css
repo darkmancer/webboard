@@ -30,13 +30,10 @@
   --color-grey-300: var(--grey-300);
   --color-success: var(--success);
   --color-error: var(--error);
-  --color-background-primary: var(--green-500);
-  --color-background-secondary: var(--green-300);
-  --color-background-main: var(--grey-100);
 }
 
 body {
-  background: var(--color-background-primary);
+  background: var(--color-grey-300);
   color: var(--foreground);
   font-family: "Inter";
 }

@@ -26,7 +26,7 @@ export default function SignInPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col-reverse md:flex md:flex-row md:justify-between w-full justify-between">
+    <div className="min-h-screen flex flex-col-reverse md:flex md:flex-row md:justify-between w-full justify-between bg-green-500">
       <div className=" bg-green-500 pl-4 pr-4  pb-[143px] md:pb-[0px] md:flex md:items-center md:mx-auto">
         <div>
           <h1 className="text-white text-2xl font-semibold mb-6">Sign in</h1>
@@ -45,7 +45,7 @@ export default function SignInPage() {
         </div>
       </div>
 
-      <div className=" w-full items-center justify-center bg-green-300 rounded-bl-[36px] rounded-br-[36px] pt-[76px] pb-[153px] md:pt-0 md:pb-0 md:flex  md:w-[45%]  md:rounded-tl-[36px] md:rounded-bl-[36px]">
+      <div className=" w-full items-center justify-center bg-green-300 rounded-bl-[36px] rounded-br-[36px] md:rounded-br-[0px] pt-[76px] pb-[153px] md:pt-0 md:pb-0 md:flex  md:w-[45%]  md:rounded-tl-[36px] md:rounded-bl-[36px]">
         <div className="text-center   w-full">
           <img
             src="/stationaries.svg"
