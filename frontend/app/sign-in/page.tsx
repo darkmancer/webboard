@@ -7,13 +7,13 @@ export default function SignInPage() {
   const [username, setUsername] = useState("");
   const router = useRouter();
 
-  // Handler for the sign-in button
   const handleSignIn = async () => {
     try {
       const response = await axiosClient.post("/users/sign-in", { username });
       const { access_token, user } = response.data;
 
       localStorage.setItem("accessToken", access_token);
+      localStorage.setItem("user", JSON.stringify(user));
 
       router.push("/");
     } catch (error: any) {
@@ -27,18 +27,20 @@ export default function SignInPage() {
 
   return (
     <div className="min-h-screen flex flex-col-reverse md:flex md:flex-row md:justify-between w-full justify-between bg-green-500">
-      <div className=" bg-green-500 pl-4 pr-4  pb-[143px] md:pb-[0px] md:flex md:items-center md:mx-auto">
-        <div>
-          <h1 className="text-white text-2xl font-semibold mb-6">Sign in</h1>
+      <div className=" bg-green-500 pl-4 pr-4  pb-[143px] md:pb-[0px] md:flex md:items-center md:mx-auto md:flex-shrink-0 md:w-[384px]">
+        <div className="w-full md:max-w-[384px] ">
+          <h1 className="text-white text-[28px] font-semibold mb-10">
+            Sign in
+          </h1>
           <input
             type="text"
             placeholder="Username"
-            className="w-full md:max-w-[384px] px-4 py-2 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="w-full px-4 py-2 border bg-white border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-text-secondary"
             onChange={(e) => setUsername(e.target.value)}
           />
           <button
             onClick={handleSignIn}
-            className="mt-4 bg-success w-full md:max-w-[384px] bg-green-500 text-white py-2 rounded-md"
+            className="mt-4 bg-success w-full md:max-w-[384px] text-white py-2 rounded-md ibmplex-small font-semibold"
           >
             Sign In
           </button>
@@ -52,7 +54,7 @@ export default function SignInPage() {
             alt="Board Illustration"
             className="w-[20vw] max-w-lg min-w-[150px] object-contain mx-auto"
           />
-          <p className="text-white italic mt-4 text-center font-[castoroso] text">
+          <p className="text-white italic mt-4 text-center castoro-base-italic">
             a Boarda
           </p>
         </div>
