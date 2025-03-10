@@ -1,34 +1,38 @@
-"use client"; // if using Next.js App Router
+"use client";
 
 import React from "react";
-import PostCard from "./PostCard"; // The single-item card from before
-
-interface Post {
-  id: number;
-  avatarUrl?: string;
-  authorName: string;
-  community: string;
-  title: string;
-  excerpt: string;
-  commentCount: number;
-}
+import PostCard from "./PostCard";
+import { PostItem } from "../page";
 
 interface PostListProps {
-  posts: Post[];
+  posts: PostItem[];
+  searchQuery: string;
+  setPosts: React.Dispatch<React.SetStateAction<PostItem[]>>;
+  editMode?: boolean;
 }
 
-export default function PostList({ posts }: PostListProps) {
+export default function PostList({
+  posts,
+  searchQuery,
+  setPosts,
+  editMode,
+}: PostListProps) {
+  const filteredPosts =
+    searchQuery.length >= 2
+      ? posts.filter((post) =>
+          post.title.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      : posts;
+
   return (
-    <div className="bg-white rounded-lg overflow-hidden divide-y divide-gray-200 mt-4">
-      {posts.map((post) => (
-        <div key={post.id} className="p-4">
+    <div className="w-full bg-white rounded-lg overflow-hidden divide-y divide-gray-200 mt-5 md:mt-4">
+      {filteredPosts.map((post, index) => (
+        <div key={`${post.id}-${index}`}>
           <PostCard
-            avatarUrl={post.avatarUrl}
-            authorName={post.authorName}
-            community={post.community}
-            title={post.title}
-            excerpt={post.excerpt}
-            commentCount={post.commentCount}
+            {...post}
+            searchQuery={searchQuery}
+            setPosts={setPosts}
+            editMode={editMode}
           />
         </div>
       ))}
