@@ -20,12 +20,7 @@ export class PostsRepository {
     content: string,
     userId: number,
     community: Community,
-  ): Promise<Post> {
-    // Validate community
-    if (!Object.values(Community).includes(community)) {
-      throw new BadRequestException(`Invalid community: ${community}`);
-    }
-
+  ) {
     return this.prisma.post.create({
       data: {
         title,
@@ -33,19 +28,19 @@ export class PostsRepository {
         userId,
         community,
       },
+      include: {
+        user: true,
+        comments: {
+          include: {
+            user: true,
+          },
+        },
+      },
     });
   }
 
   async findAll(community?: Community) {
     const whereClause = community ? { community } : {};
-
-    // (Optional) validate the community param if you want:
-    if (
-      community &&
-      !Object.values(Community).includes(community as Community)
-    ) {
-      throw new BadRequestException(`Invalid community: ${community}`);
-    }
 
     return this.prisma.post.findMany({
       where: whereClause,
@@ -63,6 +58,7 @@ export class PostsRepository {
       include: {
         user: true,
         comments: {
+          orderBy: { createdAt: 'desc' },
           include: {
             user: true,
           },
@@ -89,6 +85,14 @@ export class PostsRepository {
     return this.prisma.post.update({
       where: { id: postId },
       data: partial,
+      include: {
+        user: true,
+        comments: {
+          include: {
+            user: true,
+          },
+        },
+      },
     });
   }
 
@@ -97,13 +101,28 @@ export class PostsRepository {
   }
 
   async findByCommunity(community: Community): Promise<Post[]> {
-    // Validate community
     if (!Object.values(Community).includes(community)) {
       throw new BadRequestException(`Invalid community: ${community}`);
     }
 
     return this.prisma.post.findMany({
       where: { community },
+    });
+  }
+
+  async findByUserId(userId: number, community?: Community): Promise<Post[]> {
+    return this.prisma.post.findMany({
+      where: {
+        userId,
+        ...(community ? { community } : {}),
+      },
+      orderBy: { createdAt: 'desc' },
+      include: {
+        user: true,
+        comments: {
+          orderBy: { createdAt: 'desc' },
+        },
+      },
     });
   }
 }
