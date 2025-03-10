@@ -16,9 +16,7 @@ import {
   Request,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { Community } from '@prisma/client';
 import { PostsService } from 'src/posts/posts.service';
-import { UpdatePostDto } from './posts.dto';
 
 @Controller()
 export class PostsController {

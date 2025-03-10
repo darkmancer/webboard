@@ -5,9 +5,8 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 
-import { PostsRepository } from 'src/posts/posts.repostiory';
 import { Community, Post, User, Comment } from '@prisma/client';
-import { UpdatePostDto } from './posts.dto';
+import { PostsRepository } from './posts.repostiory';
 
 type PostWithUserComments = Post & {
   user: User;
