@@ -15,6 +15,9 @@
   --grey-300: hsla(163, 1%, 58%, 1);
   --success: hsla(141, 39%, 47%, 1);
   --error: hsla(360, 88%, 58%, 1);
+  --tag: hsla(0, 0%, 29%, 1);
+  --tag-bg: hsla(0, 0%, 95%, 1);
+  --system-grey: hsla(219, 38%, 11%, 1);
 }
 
 @theme {
@@ -30,10 +33,13 @@
   --color-grey-300: var(--grey-300);
   --color-success: var(--success);
   --color-error: var(--error);
+  --color-tag: var(--tag);
+  --color-tag-bg: var(--tag-bg);
+  --color-system-grey: var(--system-grey);
 }
 
 body {
-  background: var(--color-grey-300);
+  background: var(--color-grey-100);
   color: var(--foreground);
   font-family: "Inter";
 }
@@ -42,4 +48,25 @@ body {
   font-family: "Castoro", serif;
   font-weight: 400;
   font-style: italic;
+  font-size: 20px;
+}
+
+.castoro-base-italic {
+  font-family: "Castoro", serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: 20px;
+  @media (min-width: 768px) {
+    font-size: 28px;
+  }
+}
+
+.ibmplex-small {
+  font-family: "IBM Plex Sans Thai", sans-serif;
+  font-size: 14px;
+}
+
+.ibmplex-base {
+  font-family: "IBM Plex Sans Thai", sans-serif;
+  font-size: 16px;
 }
