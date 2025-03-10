@@ -18,24 +18,31 @@ type PostWithUserComments = Post & {
 export class PostsService {
   constructor(private readonly postsRepo: PostsRepository) {}
 
-  async createPost(dto: any): Promise<Post> {
-    return this.postsRepo.create(
+  async createPost(dto: any) {
+    const upperCaseCommunity = dto.community.toUpperCase();
+    if (!Object.values(Community).includes(upperCaseCommunity)) {
+      throw new BadRequestException(`Invalid community: ${dto.community}`);
+    }
+    const createdPost = await this.postsRepo.create(
       dto.title,
       dto.content,
       dto.userId,
-      dto.community,
+      upperCaseCommunity,
     );
+    return this.serializePost(createdPost);
   }
 
   async findAll(communityString?: string) {
     let posts: Post[] | PostWithUserComments[];
-
+    if (
+      communityString &&
+      !Object.values(Community).includes(communityString as Community)
+    ) {
+      throw new BadRequestException(`Invalid community: ${communityString}`);
+    }
     if (!communityString) {
       posts = await this.postsRepo.findAll();
     } else {
-      if (!Object.values(Community).includes(communityString as Community)) {
-        throw new BadRequestException(`Invalid community: ${communityString}`);
-      }
       posts = await this.postsRepo.findAll(communityString as Community);
     }
 
@@ -47,31 +54,49 @@ export class PostsService {
     return this.serializePost(post);
   }
 
-  // findByCommunity(community: Community): Post[] {
-  //   return this.postsRepo.findByCommunity(community);
-  // }
+  async findByUserId(userId: number, communityString?: string) {
+    let posts: Post[];
+    if (
+      communityString &&
+      !Object.values(Community).includes(communityString as Community)
+    ) {
+      throw new BadRequestException(`Invalid community: ${communityString}`);
+    }
+    if (!communityString) {
+      posts = await this.postsRepo.findByUserId(userId);
+    } else {
+      posts = await this.postsRepo.findByUserId(
+        userId,
+        communityString as Community,
+      );
+    }
+    return this.serializePosts(posts);
+  }
 
   async update(
     postId: number,
     userId: number,
     partial: { community?: string; title?: string; content?: string },
   ) {
+    let upperCaseCommunity = '';
     if (partial.community) {
-      if (!Object.values(Community).includes(partial.community as Community)) {
+      upperCaseCommunity = partial.community.toUpperCase();
+      if (!Object.values(Community).includes(upperCaseCommunity as Community)) {
         throw new BadRequestException(
-          `Invalid community: ${partial.community}`,
+          `Invalid community: ${upperCaseCommunity}`,
         );
       }
     }
 
-    const communityEnum = partial.community
-      ? (partial.community as Community)
+    const communityEnum = upperCaseCommunity
+      ? (upperCaseCommunity as Community)
       : undefined;
 
-    return this.postsRepo.update(postId, userId, {
+    const updatedPost = await this.postsRepo.update(postId, userId, {
       ...partial,
       community: communityEnum,
     });
+    return this.serializePost(updatedPost);
   }
 
   async remove(postId: number, userId: number) {
@@ -89,15 +114,15 @@ export class PostsService {
 
   private serializePosts(posts: Post[] | PostWithUserComments[]) {
     return posts.map((p) => ({
+      id: p.id,
       title: p.title,
       content: p.content,
-      community: p.community,
-      comment: p.comments.length, // total number of comments
-      timeStamp: p.createdAt, // or p.updatedAt if you prefer
-      user: {
-        name: p.user?.name || null,
-        avatar: p.user?.avatar || null,
-      },
+      community: this.titleCase(p.community),
+      commentCount: p.comments.length,
+      createdAt: p.createdAt,
+      name: p.user?.name || null,
+      avatar: p.user?.avatar || null,
+      userId: p.user?.id || null,
     }));
   }
 
@@ -108,20 +133,27 @@ export class PostsService {
     },
   ) {
     return {
+      id: post.id,
       title: post.title,
       content: post.content,
-      community: post.community,
-      comment: post.comments.map((c) => ({
+      community: this.titleCase(post.community),
+      comments: post.comments.map((c) => ({
+        id: c.id,
         name: c.user?.name || null,
-        timestamp: c.createdAt,
+        createdAt: c.createdAt,
         content: c.content,
         avatar: c.user?.avatar || null,
       })),
-      timeStamp: post.createdAt,
-      user: {
-        name: post.user?.name || null,
-        avatar: post.user?.avatar || null,
-      },
+      commentCount: post.comments.length,
+      createdAt: post.createdAt,
+      name: post.user?.name || null,
+      avatar: post.user?.avatar || null,
+      userId: post.user?.id || null,
     };
+  }
+
+  private titleCase(str: string): string {
+    if (!str) return str;
+    return str[0].toUpperCase() + str.slice(1).toLowerCase();
   }
 }
