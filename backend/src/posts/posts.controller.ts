@@ -35,6 +35,13 @@ export class PostsController {
   }
 
   @UseGuards(AuthGuard('jwt'))
+  @Get('posts/mine')
+  async getMyPosts(@Request() req, @Query('community') community?: string) {
+    const userId = req.user.id;
+    return this.postsService.findByUserId(userId, community);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
   @Post('post')
   async createPost(
     @Body() body: { community: string; title: string; content: string },
