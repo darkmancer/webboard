@@ -1,18 +1,35 @@
 "use client";
 
-export default function Sidebar() {
-  return (
-    <aside className="h-full ">
-      <nav className="space-y-4">
-        <a href="/" className="flex items-center space-x-2">
-          <img src="/home-black.svg" />
-          <span>Home</span>
-        </a>
+import { usePathname } from "next/navigation";
 
-        <a href="/blog" className="flex items-center space-x-2">
-          <img src="/blog-black.svg" />
-          <span>Our Blog</span>
-        </a>
+export default function Sidebar() {
+  const pathname = usePathname();
+
+  return (
+    <aside className="h-full">
+      <nav className="pl-7 mt-3">
+        <div className="mb-4">
+          <a
+            href="/"
+            className={`flex items-center gap-3 ${
+              pathname === "/" ? "font-extrabold" : "font-medium"
+            }`}
+          >
+            <img src="/home-black.svg" alt="Home" />
+            <span>Home</span>
+          </a>
+        </div>
+        <div className="pl-1">
+          <a
+            href="/our-blog"
+            className={`flex items-center gap-3 ${
+              pathname === "/our-blog" ? "font-extrabold" : "font-medium"
+            }`}
+          >
+            <img src="/blog-black.svg" alt="Our Blog" />
+            <span>Our Blog</span>
+          </a>
+        </div>
       </nav>
     </aside>
   );
