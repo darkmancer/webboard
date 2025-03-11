@@ -1,4 +1,5 @@
 # Webboard
+
 Dear Datawow team please provide direct feedback if possible thankyou.
 
 ## Prerequisites
@@ -9,22 +10,27 @@ Dear Datawow team please provide direct feedback if possible thankyou.
 
 ## Commands
 
-| command             | description                                                             |
-| ------------------- | ----------------------------------------------------------------------- |
-| yarn build          | Build both backend and frontend.                                        |
-| yarn dev            | Start development mode. Frontend on port 3000 and backend on port 3001. |
-| yarn lint           | Run linter                                                              |
-| yarn format         | Run prettier to format code                                             |
-| yarn db             | Start PostgresDB on port 5432 with docker compose                       |
-| yarn db:down        | Stop PostgresDB on port 5432 with docker compose                        |
-| yarn test           | Run unit test                                                           |
-| yarn test:e2e       | Run end to end test                                                     |
-| yarn seed           | Seed countries and roles data into DB. Requires DB running.             |
-| yarn migrate:dev    | Run development mode migration.                                         |
+| command            | description                                                                                |
+| ------------------ | ------------------------------------------------------------------------------------------ |
+| yarn docker:up     | Change to the backend folder and start Docker Compose in detached mode.                    |
+| yarn db:push       | Push the Prisma schema changes to the database from the backend workspace.                 |
+| yarn db:seed       | Seed the database (e.g. with countries and roles) from the backend workspace.              |
+| yarn start:backend | Start the NestJS backend server from the backend workspace.                                |
+| yarn dev:backend   | Start the backend server in development mode (watch mode) from the backend workspace.      |
+| yarn dev:frontend  | Start the Next.js frontend development server from the frontend workspace.                 |
+| yarn setup:all     | Install all dependencies, start Docker Compose, push Prisma schema, and seed the database. |
+| yarn dev:all       | Run both the backend and frontend development servers concurrently.                        |
 
 ## Start development
 
-- start DB with `yarn db`
-- run DB migration with `yarn migrate:dev`
-- start full app with `yarn dev`
+For the first time setting up run
 
+```
+yarn setup:all
+```
+
+then run
+
+```
+ yarn dev:all
+```

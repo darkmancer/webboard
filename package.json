@@ -4,5 +4,15 @@
   "workspaces": [
     "frontend",
     "backend"
-  ]
+  ],
+  "scripts": {
+    "docker:up": "cd backend && docker compose up -d",
+    "db:push": "yarn workspace backend prisma db push",
+    "db:seed": "yarn workspace backend prisma db seed",
+    "start:backend": "yarn workspace backend start",
+    "dev:backend": "yarn workspace backend dev",
+    "dev:frontend": "yarn workspace frontend dev",
+    "setup:all": "yarn install && yarn docker:up && yarn db:push && yarn db:seed",
+    "dev:all": "yarn dev:backend & yarn dev:frontend"
+  }
 }
