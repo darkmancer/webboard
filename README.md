@@ -23,13 +23,19 @@ Dear Datawow team please provide direct feedback if possible thankyou.
 
 ## Start development
 
-For the first time setting up run
+For the first time setting up make a .env file fomr .env.example first by running
+
+```
+cp frontend/.env.example frontend/.env && cp backend/.env.example backend/.env
+```
+
+then to setup run
 
 ```
 yarn setup:all
 ```
 
-then run
+then run to start both server locally
 
 ```
  yarn dev:all
